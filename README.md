@@ -1,2 +1,2 @@
-# CS499-API
-CS 499 API
+# CS499-MEAN
+Contains Front and back end
