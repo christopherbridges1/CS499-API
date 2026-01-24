@@ -2,13 +2,12 @@ import { Component, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CustomerAuth } from '../../services/customer-auth'; // adjust path/name if yours differs
-import { CustomerHeader } from '../../shared/customer-header'; // optional if you use the header
+import { CustomerAuth } from '../../services/customer-auth'; 
 
 @Component({
   selector: 'app-customer-register',
   standalone: true,
-  imports: [CommonModule, FormsModule, CustomerHeader],
+  imports: [CommonModule, FormsModule],
   templateUrl: './customer-register.html',
   styleUrls: ['./customer-register.css']
 })

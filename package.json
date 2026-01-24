@@ -4,7 +4,13 @@
   "description": "Grazioso Salvare API",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "build:ui": "npm --prefix ui run build",
+    "start:prod": "npm run build:ui && npm start",
+    "dev:api": "node server.js",
+    "dev:ui": "npm --prefix ui start",
+    "seed:admin": "node scripts/seedAdmin.js",
+    "seed:animals": "node scripts/seedAnimals.js"
   },
   "engines": {
     "node": ">=18"
@@ -18,4 +24,5 @@
     "mongodb": "^3.6.12",
     "mongoose": "^5.13.22"
   }
+  
 }

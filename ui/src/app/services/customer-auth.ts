@@ -34,15 +34,21 @@ export class CustomerAuth {
     return !!this.getToken() && !!this.user();
   }
 
-  async register(username: string, password: string) {
+ async register(username: string, password: string) {
   const res = await fetch('/api/customers/register', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username, password })
   });
 
+  // Try to parse JSON either way
   const data = await res.json().catch(() => null);
-  if (!res.ok) throw new Error(data?.error || 'Registration failed');
+
+  if (!res.ok) {
+    // backend usually returns { ok:false, error:"..." }
+    throw new Error(data?.error || `Registration failed (${res.status})`);
+  }
+
   return data;
 }
   /*

@@ -38,16 +38,24 @@ app.get("/health", (req, res) => {
 app.use("/api/animals", require("./routes/animals"));
 app.use("/api/customers", require("./routes/customers"));
 app.use("/api/favorites", require("./routes/favorites"));
+app.use("/api/admin", require("./routes/admin"));
 
-// Serve Angular build from /public
-app.use(express.static(path.join(__dirname, "public")));
+// Serve Angular build (Angular 17+ outputs to /browser)
+const fs = require("fs");
 
-// SPA fallback
-app.get("*", (req, res) => {
-  // If the file doesn't exist, return index.html for angular routing
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
+const angularDistPath = path.join(__dirname, "public", "browser");
+const indexHtml = path.join(angularDistPath, "index.html");
 
+if (fs.existsSync(indexHtml)) {
+  app.use(express.static(angularDistPath));
+
+  // SPA fallback (exclude /api)
+  app.get(/^\/(?!api).*/, (req, res) => {
+    res.sendFile(indexHtml);
+  });
+} else {
+  console.warn("⚠️ Angular UI not built yet. Run: npm run build:ui");
+}
 // Starts the server ONLY after DB connects
 connectDb()
   .then(() => {

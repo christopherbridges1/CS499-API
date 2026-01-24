@@ -10,6 +10,10 @@
         (input)="query.set(($any($event.target)).value)" />
     </div>
 
+    <!-- optional: loading + error -->
+    <div class="error" *ngIf="error()">{{ error() }}</div>
+    <div class="muted" *ngIf="loading()">Loading…</div>
+
     <div class="grid">
       <article class="card" *ngFor="let d of filtered()">
         <div class="card-top">
@@ -18,11 +22,12 @@
             <div class="breed">{{ d.breed }}</div>
           </div>
 
-          <button class="heart"
-                  type="button"
-                  (click)="toggleFavorite(d.id)"
-                  [attr.aria-label]="'Favorite ' + d.name">
-            <span class="heart-icon" [class.on]="isFav(d.id)">❤</span>
+          <button
+            class="heart"
+            type="button"
+            (click)="toggleFavorite(d._id)"
+            [attr.aria-label]="'Favorite ' + d.name">
+            <span class="heart-icon" [class.on]="isFav(d._id)">❤</span>
           </button>
         </div>
 

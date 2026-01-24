@@ -12,7 +12,7 @@ import { CustomerLogin } from './pages/customer-login/customer-login';
 // Admin pages
 import { Login } from './pages/login/login';               
 import { Animals } from './pages/animals/animals';
-import { authGuard } from './services/auth-guard';
+import { adminGuard } from './services/admin-guard';
 
 export const routes: Routes = [
   // CUSTOMER SITE
@@ -33,7 +33,7 @@ export const routes: Routes = [
     component: AdminLayout,
     children: [
       { path: 'login', component: Login },
-      { path: 'animals', component: Animals, canActivate: [authGuard] },
+      { path: 'animals', component: Animals, canActivate: [adminGuard] },
       { path: '', redirectTo: 'animals', pathMatch: 'full' },
     ]
   },

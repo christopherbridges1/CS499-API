@@ -17,15 +17,28 @@ export class CustomerLogin {
   password = '';
   error = signal('');
 
-  constructor(private auth: CustomerAuth, private router: Router) {}
+  constructor(private auth: CustomerAuth, private router: Router) { }
 
   async submit() {
     this.error.set('');
-    const ok = await this.auth.login(this.username, this.password);
-    if (!ok) {
+
+    const u = this.username.trim();
+    const p = this.password;
+
+    if (!u || !p?.trim()) {
       this.error.set('Please enter a username and password.');
       return;
     }
-    this.router.navigate(['/browse']);
+
+    try {
+      const ok = await this.auth.login(u, p);
+      if (!ok) {
+        this.error.set('Invalid username or password.');
+        return;
+      }
+      this.router.navigate(['/browse']);
+    } catch (e: any) {
+      this.error.set(e?.message || 'Login failed.');
+    }
   }
 }
