@@ -160,7 +160,9 @@ async function run() {
     throw new Error("❌ Missing MONGODB_URI in .env");
   }
 
-  await mongoose.connect(process.env.MONGODB_URI);
+  await mongoose.connect(process.env.MONGODB_URI, {
+dbName: "cs499-cbridges-database",
+});;
 
   // Deletes entries
   // await Animal.deleteMany({});
