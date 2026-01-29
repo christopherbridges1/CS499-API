@@ -1,0 +1,25 @@
+<header class="topbar">
+  <div class="container">
+    <a class="brand" routerLink="/">
+      <img class="logo" [src]="('/assets/logo.png')" alt="Grazioso Salvare logo" />
+      <div class="brand-text">
+        <div class="title">Grazioso Salvare</div>
+        <div class="subtitle">Adoption & Rescue</div>
+      </div>
+    </a>
+
+    <nav class="nav">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+      <a routerLink="/browse" routerLinkActive="active">Browse</a>
+
+      <a class="admin-link" routerLink="/admin/login">Admin</a>
+
+      <span class="fav" *ngIf="auth.isLoggedIn()">
+        ❤️ {{ fav.count() }}
+      </span>
+
+      <a class="cta" *ngIf="!auth.isLoggedIn()" routerLink="/customer/login">Login</a>
+      <button class="ghost" *ngIf="auth.isLoggedIn()" (click)="auth.logout()">Logout</button>
+    </nav>
+  </div>
+</header>

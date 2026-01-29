@@ -1,0 +1,38 @@
+<div class="hero-card">
+  <div class="badge">Favorites ❤️</div>
+
+  <ng-container *ngIf="auth.isLoggedIn(); else loggedOut">
+    <ng-container *ngIf="loadingFavorites">
+      <div class="small">Loading your favorites…</div>
+    </ng-container>
+
+    <ng-container *ngIf="!loadingFavorites && favoritesError">
+      <div class="small">{{ favoritesError }}</div>
+      <a (click)="loadFavorites()" class="ghost small" style="cursor:pointer;">Retry →</a>
+    </ng-container>
+
+    <ng-container *ngIf="!loadingFavorites && !favoritesError && favoriteAnimals.length > 0; else noneYet">
+      <div class="favorites-list">
+        <div class="favorite" *ngFor="let a of favoriteAnimals">
+          <strong>{{ a.name }}</strong>
+          <div class="meta">{{ a.breed }}</div>
+          <div class="status">{{ a.status || 'Available' }}</div>
+        </div>
+      </div>
+
+      <a routerLink="/browse" class="ghost small">View Favorites →</a>
+    </ng-container>
+
+    <ng-template #noneYet>
+      <div class="big">Favorites ❤️</div>
+      <div class="small">You haven’t favorited any dogs yet.</div>
+      <a routerLink="/browse" class="ghost small">Browse Dogs →</a>
+    </ng-template>
+  </ng-container>
+
+  <ng-template #loggedOut>
+    <div class="big">Favorites ❤️</div>
+    <div class="small">Log in to save dogs you love.</div>
+    <a routerLink="/customer/login" class="ghost small">Customer Login →</a>
+  </ng-template>
+</div>

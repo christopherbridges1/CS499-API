@@ -1,0 +1,30 @@
+<div class="login-wrap">
+  <div class="card">
+    <div class="brand">
+      <img src="/assets/logo.png" class="logo" alt="Logo" />
+      <div>
+        <div class="title">Grazioso Salvare</div>
+        <div class="subtitle">Admin Console</div>
+      </div>
+    </div>
+
+    <h1>Sign in</h1>
+    <p class="muted">Use your admin credentials to access the dashboard.</p>
+
+    <form (ngSubmit)="submit()">
+      <div class="field">
+        <label>Username</label>
+        <input [(ngModel)]="username" name="username" placeholder="admin" />
+      </div>
+
+      <div class="field">
+        <label>Password</label>
+        <input [(ngModel)]="password" name="password" type="password" placeholder="••••••••" />
+      </div>
+
+      <div class="error" *ngIf="error()">{{ error() }}</div>
+
+      <button class="primary" type="submit">Login</button>
+    </form>
+  </div>
+</div>

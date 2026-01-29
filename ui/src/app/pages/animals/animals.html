@@ -1,0 +1,210 @@
+<nav class="breadcrumb">
+  <span>Admin</span>
+  <span class="sep">/</span>
+  <span class="current">Animals</span>
+</nav>
+
+<section class="page-header">
+  <h1>Animals</h1>
+  <p>Admin dashboard for managing animals and mapping coordinates.</p>
+</section>
+
+<div class="error" *ngIf="error()">{{ error() }}</div>
+<div class="success" *ngIf="success()">{{ success() }}</div>
+
+<section class="stats">
+  <div class="stat-card">
+    <div class="stat-label">Total Animals</div>
+    <div class="stat-value">{{ total() }}</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-label">Available</div>
+    <div class="stat-value">{{ available() }}</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-label">Adoptions</div>
+    <div class="stat-value">{{ adopted() }}</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-label">Transfers</div>
+    <div class="stat-value">{{ transfer() }}</div>
+  </div>
+</section>
+
+<section class="grid">
+  <!-- Left side: Form & Results -->
+  <section class="card">
+    <div class="card-header">
+      <h2>{{ editId() ? 'Edit Animal' : 'Add Animal' }}</h2>
+      <span class="count" *ngIf="loading()">Loading…</span>
+    </div>
+
+    <div class="form">
+      <div class="row">
+        <div class="field">
+          <label>Name *</label>
+          <input
+            [(ngModel)]="form().name"
+            (ngModelChange)="form.set({ ...form(), name: $event })"
+            placeholder="Buddy"
+          />
+        </div>
+
+        <div class="field">
+          <label>Breed *</label>
+          <input
+            [(ngModel)]="form().breed"
+            (ngModelChange)="form.set({ ...form(), breed: $event })"
+            placeholder="Labrador Retriever"
+          />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label>Sex</label>
+          <select [(ngModel)]="form().sex" (ngModelChange)="form.set({ ...form(), sex: $event })">
+            <option value="">(none)</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Age (weeks)</label>
+          <input
+            type="number"
+            min="0"
+            [(ngModel)]="form().ageWeeks"
+            (ngModelChange)="form.set({ ...form(), ageWeeks: $event })"
+            placeholder="12"
+          />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label>Rescue Type</label>
+          <select
+            [(ngModel)]="form().rescueType"
+            (ngModelChange)="form.set({ ...form(), rescueType: $event })"
+          >
+            <option value="">(none)</option>
+            <option value="Water">Water</option>
+            <option value="Mountain">Mountain</option>
+            <option value="Disaster">Disaster</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Status</label>
+          <select [(ngModel)]="form().status" (ngModelChange)="form.set({ ...form(), status: $event })">
+            <option value="Available">Available</option>
+            <option value="Adoption">Adoption</option>
+            <option value="Transfer">Transfer</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Description</label>
+        <textarea
+          rows="3"
+          [(ngModel)]="form().description"
+          (ngModelChange)="form.set({ ...form(), description: $event })"
+          placeholder="Notes about the animal..."
+        ></textarea>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label>Latitude</label>
+          <input
+            [(ngModel)]="form().lat"
+            (ngModelChange)="form.set({ ...form(), lat: $event })"
+            placeholder="30.2672"
+          />
+        </div>
+
+        <div class="field">
+          <label>Longitude</label>
+          <input
+            [(ngModel)]="form().lon"
+            (ngModelChange)="form.set({ ...form(), lon: $event })"
+            placeholder="-97.7431"
+          />
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px; justify-content:flex-end;">
+        <button class="primary" type="button" (click)="save()">
+          {{ editId() ? 'Save Changes' : 'Add Animal' }}
+        </button>
+
+        <button *ngIf="editId()" type="button" class="ghost" (click)="cancelEdit()">
+          Cancel
+        </button>
+      </div>
+    </div>
+
+    <hr />
+
+    <div class="card-header">
+      <h2>Results</h2>
+      <span class="count">{{ total() }} animals</span>
+    </div>
+
+    <div class="table">
+      <div class="row header">
+        <div>Name</div>
+        <div>Breed</div>
+        <div>Status</div>
+        <div></div>
+      </div>
+
+      <div
+        class="row"
+        *ngFor="let a of animals()"
+        (click)="select(a._id)"
+        [class.selected]="a._id === selectedId()"
+      >
+        <div class="strong">{{ a.name }}</div>
+        <div>{{ a.breed }}</div>
+        <div>{{ a.status || 'Available' }}</div>
+
+        <div style="text-align:right; display:flex; gap:8px; justify-content:flex-end;">
+          <button type="button" class="ghost" (click)="startEdit(a._id); $event.stopPropagation();">
+            Edit
+          </button>
+          <button type="button" class="danger" (click)="remove(a._id); $event.stopPropagation();">
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Right side: Map -->
+  <section class="card map-card">
+    <div class="card-header">
+      <h2>Map</h2>
+      <span class="count">OpenStreetMap</span>
+    </div>
+
+    <div class="map-wrap">
+      <iframe
+        class="map"
+        [src]="mapUrl"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
+    </div>
+
+    <div class="map-footer">
+      Click an animal to focus the map (uses location.coordinates when available).
+    </div>
+  </section>
+</section>

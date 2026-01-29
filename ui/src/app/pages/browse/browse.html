@@ -1,0 +1,45 @@
+<main class="page">
+  <div class="container">
+    <div class="top">
+      <h1>Browse Dogs</h1>
+
+      <input class="search"
+             placeholder="Search by name or breed..."
+             [value]="query()"
+             (input)="query.set(($any($event.target)).value)" />
+    </div>
+
+    <!-- loading & error -->
+    <div class="error" *ngIf="error()">{{ error() }}</div>
+    <div class="muted" *ngIf="loading()">Loading…</div>
+
+    <div class="grid">
+      <article class="card" *ngFor="let d of filtered()">
+        <div class="card-top">
+          <div>
+            <div class="name">{{ d.name }}</div>
+            <div class="breed">{{ d.breed }}</div>
+          </div>
+
+          <button class="heart"
+                  type="button"
+                  (click)="toggleFavorite(d._id)"
+                  [attr.aria-label]="'Favorite ' + d.name">
+            <span class="heart-icon" [class.on]="isFav(d._id)">❤</span>
+          </button>
+        </div>
+
+        <div class="meta">
+          <span>{{ d.sex || 'Unknown' }}</span>
+          <span *ngIf="d.ageWeeks">• {{ d.ageWeeks }} weeks</span>
+        </div>
+
+        <p class="desc">{{ d.description || 'No description provided.' }}</p>
+
+        <div class="hint" *ngIf="!auth.isLoggedIn()">
+          Log in to save favorites.
+        </div>
+      </article>
+    </div>
+  </div>
+</main>

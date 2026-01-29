@@ -1,0 +1,32 @@
+<main class="page">
+  <div class="card">
+    <h1>Create Account</h1>
+    <p class="muted">Make an account to save your favorite dogs.</p>
+
+    <form (ngSubmit)="submit()">
+      <div class="field">
+        <label>Username</label>
+        <input [(ngModel)]="username" name="username" placeholder="jane_doe" />
+      </div>
+
+      <div class="field">
+        <label>Password</label>
+        <input [(ngModel)]="password" name="password" type="password" placeholder="••••••••" />
+      </div>
+
+      <div class="field">
+        <label>Confirm Password</label>
+        <input [(ngModel)]="confirmPassword" name="confirmPassword" type="password" placeholder="••••••••" />
+      </div>
+
+      <div class="error" *ngIf="error()">{{ error() }}</div>
+
+      <button class="primary" type="submit">Create Account</button>
+
+      <div class="footer">
+        <span class="muted">Already have an account?</span>
+        <a routerLink="/customer/login">Login</a>
+      </div>
+    </form>
+  </div>
+</main>

@@ -1,0 +1,84 @@
+.page {
+  background: var(--bg);
+  min-height: calc(100vh - 64px);
+  padding: 26px 16px;
+  display: grid;
+  place-items: start center;
+}
+
+.card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+
+h1 {
+  margin: 0 0 6px;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.muted {
+  margin: 0 0 14px;
+  color: var(--muted);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+label {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+input {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  font-size: 14px;
+  background: white;
+}
+
+  input:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+.error {
+  color: #b91c1c;
+  background: rgba(185, 28, 28, 0.08);
+  border: 1px solid rgba(185, 28, 28, 0.15);
+  padding: 10px 12px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+button.primary {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: var(--accent);
+  color: white;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.footer {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  font-size: 13px;
+}

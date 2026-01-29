@@ -1,0 +1,26 @@
+<header class="topbar">
+  <div class="container">
+    <a class="brand" routerLink="/animals">
+      <img class="logo" src="/assets/logo.png" alt="Grazioso Salvare logo" />
+      <div class="brand-text">
+        <div class="title">
+          Grazioso Salvare
+          <span class="pill">ADMIN</span>
+        </div>
+        <div class="subtitle">Animal Shelter Dashboard</div>
+      </div>
+    </a>
+
+    <nav class="nav">
+      <a routerLink="/animals" routerLinkActive="active">Animals</a>
+
+      <button class="logout" *ngIf="auth.isLoggedIn()" (click)="auth.logout()">
+        Logout
+      </button>
+
+      <a class="login" *ngIf="!auth.isLoggedIn()" routerLink="/login">
+        Login
+      </a>
+    </nav>
+  </div>
+</header>

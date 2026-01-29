@@ -1,0 +1,30 @@
+{
+  "name": "cs499-api",
+  "version": "1.0.0",
+  "description": "Grazioso Salvare API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "build:ui": "npm --prefix ui run build",
+    "start:prod": "npm run build:ui && npm start",
+    "dev:api": "node server.js",
+    "dev:ui": "npm --prefix ui start",
+    "seed:admin": "node scripts/seedAdmin.js",
+    "seed:animals": "node scripts/seedAnimals.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.3",
+    "express": "^4.22.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongodb": "^3.6.12",
+    "mongoose": "^5.13.22"
+  },
+  "devDependencies": {
+    "eslint": "^9.39.2"
+  }
+}

@@ -1,0 +1,6 @@
+node_modules
+.env
+
+# Visual Studio / VS Code
+.vs/
+.vscode/

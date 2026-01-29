@@ -1,0 +1,106 @@
+.page {
+  background: var(--bg);
+  min-height: calc(100vh - 64px);
+  padding: 26px 16px;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.top {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 900;
+}
+
+.search {
+  width: min(420px, 100%);
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: white;
+  font-size: 14px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+
+.card-top {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.name {
+  font-weight: 900;
+  font-size: 18px;
+}
+
+.breed {
+  color: var(--muted);
+  font-weight: 800;
+  margin-top: 2px;
+}
+
+.meta {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.desc {
+  margin: 10px 0 0;
+  color: var(--text);
+  opacity: 0.92;
+  min-height: 42px;
+}
+
+.heart {
+  border: 1px solid var(--border);
+  background: white;
+  border-radius: 12px;
+  width: 42px;
+  height: 42px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.heart-icon {
+  font-size: 18px;
+  color: rgba(17,24,39,0.25);
+}
+
+  .heart-icon.on {
+    color: #ef4444;
+  }
+
+.hint {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 700;
+}
