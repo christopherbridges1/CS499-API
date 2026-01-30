@@ -12,10 +12,8 @@
       <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
       <a routerLink="/browse" routerLinkActive="active">Browse</a>
 
-      <a class="admin-link" routerLink="/admin/login">Admin</a>
-
       <span class="fav" *ngIf="auth.isLoggedIn()">
-        ❤️ {{ fav.count() }}
+        ❤️ {{ fav.countSignal() }}
       </span>
 
       <a class="cta" *ngIf="!auth.isLoggedIn()" routerLink="/customer/login">Login</a>

@@ -1,57 +1,119 @@
-// Manages a list of favorite animal IDs for user
-import { Injectable } from '@angular/core';
+// Manages list of favorite animal IDs for user
+import { Injectable, signal } from '@angular/core';
 import { CustomerAuth } from './customer-auth';
 
-// Favorites service definition
-@Injectable({ providedIn: 'root' })
-// Favorites service class
-export class Favorites {
-  constructor(private auth: CustomerAuth) { }
+type AnimalLike = { _id: string };
 
-  //  Generate a unique key for storing favorites in local storage
+@Injectable({ providedIn: 'root' })
+export class Favorites {
+  constructor(private auth: CustomerAuth) {
+    // Initialize count from current storage
+    this.syncCountFromStorage();
+  }
+
+  // incremented whenever favorites change (used by components to refresh)
+  favoritesChanged = signal(0);
+
+  // stable reactive count for templates (avoid calling count() in HTML)
+  countSignal = signal<number>(0);
+
+  // Generate a unique key for storing favorites in local storage
   private key(): string {
     const u = this.auth.user();
     return u ? `favorites:${u.id}` : `favorites:guest`;
   }
 
-  // Read the set of favorite animal IDs from local storage
   private readSet(): Set<string> {
     const raw = localStorage.getItem(this.key());
     const arr = raw ? (JSON.parse(raw) as string[]) : [];
     return new Set(arr);
   }
 
-  // Write the set of favorite animal IDs to local storage
   private writeSet(set: Set<string>) {
     localStorage.setItem(this.key(), JSON.stringify(Array.from(set)));
   }
 
-  // List all favorite animal IDs
+  private syncCountFromStorage() {
+    this.countSignal.set(this.readSet().size);
+  }
+
+  // Replace local favorites with an exact list (server truth)
+  private setIds(ids: string[]) {
+    this.writeSet(new Set(ids));
+    this.syncCountFromStorage();
+  }
+
   list(): string[] {
     return Array.from(this.readSet());
   }
 
-  // Check if an animal ID is in favorites
   has(animalId: string): boolean {
     return this.readSet().has(animalId);
   }
 
-  // Toggle the favorite status of an animal ID
+  // Local-only toggle (used for optimistic UI)
   toggle(animalId: string): boolean {
     const set = this.readSet();
     if (set.has(animalId)) set.delete(animalId);
     else set.add(animalId);
+
     this.writeSet(set);
+    this.syncCountFromStorage();
+    this.favoritesChanged.update(v => v + 1);
+
     return set.has(animalId);
   }
 
-  // Get the count of favorite animal IDs
+  // Keep this for non-template usage only (don’t call from HTML)
   count(): number {
     return this.readSet().size;
   }
 
-  // Clear all favorite animal IDs
   clear() {
     this.writeSet(new Set());
+    this.syncCountFromStorage();
+    this.favoritesChanged.update(v => v + 1);
+  }
+
+  // Fetch favorites from server and sync localStorage
+
+  async listAnimals(): Promise<any[]> {
+    const token = this.auth.getToken();
+    if (!token) return [];
+
+    const res = await fetch('/api/favorites', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    const data = await res.json().catch(() => null);
+    if (!res.ok || !data?.ok) {
+      throw new Error(data?.error || 'Failed to load favorites');
+    }
+
+    const animals = (data.animals || []) as AnimalLike[];
+
+    const ids = animals.map(a => a._id).filter(Boolean);
+    setTimeout(() => this.setIds(ids), 0);
+    return animals;
+  }
+  // Toggle a favorite on the server WITHOUT directly toggling localStorage.
+  async toggleServerNoLocal(animalId: string, wasFav: boolean): Promise<void> {
+    const token = this.auth.getToken();
+    if (!token) throw new Error('Not logged in');
+
+    const method = wasFav ? 'DELETE' : 'POST';
+
+    const res = await fetch(`/api/favorites/${animalId}`, {
+      method,
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || data?.ok === false) {
+      throw new Error(data?.error || 'Failed to update favorite');
+    }
+
+    // Notify UI to refresh. Home will re-fetch and re-sync ids.
+    this.favoritesChanged.update(v => v + 1);
   }
 }

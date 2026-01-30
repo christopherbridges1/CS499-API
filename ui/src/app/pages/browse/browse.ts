@@ -78,13 +78,26 @@ export class Browse {
   }
 
   // Toggle favorite status of an animal
-  toggleFavorite(animalId: string) {
-    if (!this.auth.isLoggedIn()) {
-      window.location.href = '/customer/login';
-      return;
-    }
-    this.fav.toggle(animalId);
+async toggleFavorite(animalId: string) {
+  if (!this.auth.isLoggedIn()) {
+    window.location.href = '/customer/login';
+    return;
   }
+
+  // Flip local state 
+  const wasFav = this.fav.has(animalId);
+  this.fav.toggle(animalId);
+
+  try {
+    // Sync with server 
+    await this.fav.toggleServerNoLocal(animalId, wasFav);
+  } catch (e: any) {
+    // Roll back if server fails
+    this.fav.toggle(animalId);
+    alert(e?.message || 'Failed to update favorite.');
+  }
+}
+
 
   // Check if an animal is a favorite
   isFav(animalId: string): boolean {
