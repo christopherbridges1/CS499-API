@@ -19,7 +19,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 const fs = require("fs");
 const cors = require("cors");
-
+const loginRoutes = require("./routes/login");
 const app = express();
 
 // *** Server configuration ***
