@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const Customer = require('../models/Customer'); 
-const User = require('../models/User');         
+const Customer = require('../models/Customer');
+const User = require('../models/User');
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
@@ -45,7 +45,11 @@ router.post('/', async (req, res) => {
     const okPw = await bcrypt.compare(password, admin.passwordHash || admin.password);
     if (!okPw) return res.status(401).json({ ok: false, error: 'Invalid credentials' });
 
-    const token = signToken({ sub: admin._id, role: 'admin', username: admin.username }, secret);
+    const token = signToken(
+      { sub: admin._id, role: 'admin', username: admin.username },
+      secret
+    );
+
     return res.json({
       ok: true,
       token,
