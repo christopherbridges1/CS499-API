@@ -121,7 +121,7 @@ async function connectDb() {
         serverSelectionTimeoutMS: DB_TIMEOUT_MS,
     });
     // Log successful connection
-    logInfo("✅ Connected to Mongo/Cosmos DB", { dbName: DB_NAME });
+    logInfo("Connected to Mongo/Cosmos DB", { dbName: DB_NAME });
 }
 
 // *** Start the server ***
@@ -137,7 +137,7 @@ async function start() {
             logInfo(`🚀 Listening on http://${HOST}:${PORT}`, { PORT });
         });
     } catch (err) {
-        logError("❌ Startup failed", { message: err.message });
+        logError("Startup failed", { message: err.message });
         process.exit(1);
     }
 }
