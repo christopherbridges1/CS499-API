@@ -160,7 +160,7 @@ const animals = [
 // Main function to run the seed script
 async function run() {
     if (!process.env.MONGODB_URI) {
-        throw new Error("❌ Missing MONGODB_URI in .env");
+        throw new Error("Missing MONGODB_URI in .env");
     }
 
     // Connect to MongoDB
@@ -172,13 +172,13 @@ async function run() {
 
         // Insert sample animals
         const result = await Animal.insertMany(animals);
-        console.log(`✅ Inserted ${result.length} animals`);
+        console.log(`Inserted ${result.length} animals`);
 
         // Disconnect from the database
         await mongoose.disconnect();
     }
       // Execute the seed script
 run().catch((e) => {
-        console.error("❌ Seed failed:", e);
+        console.error("Seed failed:", e);
         process.exit(1);
     });
